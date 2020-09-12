@@ -322,7 +322,7 @@ class App < Sinatra::Base
       end
 
     transaction('post_api_chair_buy') do |tx_name|
-      chair = db.xquery('SELECT * FROM chair WHERE id = ? AND stock > 0 FOR UPDATE', id).first
+      chair = db.xquery('SELECT * FROM chair WHERE id = ? AND stock > 0 ', id).first
       unless chair
         rollback_transaction(tx_name) if in_transaction?(tx_name)
         halt 404
@@ -573,7 +573,13 @@ class App < Sinatra::Base
     d = chair[:depth]
 
     sql = "SELECT * FROM estate WHERE (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
-    estates = db.xquery(sql, w, h, w, d, h, w, h, d, d, w, d, h).to_a
+    estates = db.xquery(sql,
+                        w, h,
+                        w, d,
+                        h, w,
+                        h, d,
+                        d, w,
+                        d, h).to_a
 
     { estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
