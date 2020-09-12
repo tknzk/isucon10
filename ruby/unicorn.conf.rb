@@ -1,4 +1,5 @@
-listen (ENV.fetch('SERVER_PORT', 1323)).to_i
+# listen (ENV.fetch('SERVER_PORT', 1323)).to_i
+listen File.expand_path('../tmp/unicorn.sock', __FILE__)
 
 worker_processes (ENV.fetch('WORKER_NUM', 16)).to_i
 
