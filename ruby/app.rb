@@ -290,16 +290,27 @@ class App < Sinatra::Base
     end
 
     transaction('post_api_chair') do
+      ids = []
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
+        ids << row[0].to_i
 
-        # logger.error "🔥#{row.inspect}"
-        next if row[9].empty?
-        row[9].split(',').each do |ft|
+        # # logger.error "🔥#{row.inspect}"
+        # next if row[9].empty?
+        # row[9].split(',').each do |ft|
+        #   sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
+        #   # logger.error "🔥#{sql_insert}"
+        #   db.xquery(sql_insert, row[0], ft)
+        # end
+      end
+
+      sql = "SELECT id, features FROM chair WHERE id in #{ids.join(',')} and features <> '' order by id ASC"
+      chairs = db.xquery(sql).to_a
+      chairs.each do |row|
+        row[:features].split(',').each do |ft|
           sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
-          # logger.error "🔥#{sql_insert}"
-          db.xquery(sql_insert, row[0], ft)
+          db.xquery(sql_insert, row[:id], ft)
         end
       end
     end
