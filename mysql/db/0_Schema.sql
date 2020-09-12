@@ -3,6 +3,7 @@ CREATE DATABASE isuumo;
 
 DROP TABLE IF EXISTS isuumo.estate;
 DROP TABLE IF EXISTS isuumo.chair;
+DROP TABLE IF EXISTS isuumo.chair_features;
 
 CREATE TABLE isuumo.estate
 (
@@ -40,3 +41,11 @@ CREATE TABLE isuumo.chair
     stock       INTEGER         NOT NULL
 );
 ALTER TABLE isuumo.chair ADD INDEX index_stock(stock);
+
+CREATE TABLE isuumo.chair_features
+    id          INTEGER         NOT NULL PRIMARY KEY,
+    chair_id    INTEGER         NOT NULL,
+    feature VARCHAR(64) NOT NULL
+);
+ALTER TABLE isuumo.chair ADD INDEX index_feature(feature);
+
