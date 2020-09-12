@@ -292,16 +292,14 @@ class App < Sinatra::Base
     end
 
     transaction('post_api_chair') do
-      ids = []
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
-        ids << row[0].to_i
       end
 
     end
     transaction('post_api_chair_s') do
-      sql = "SELECT id, features FROM chair WHERE id in (#{ids.join(',')}) and features <> '' order by id ASC"
+      sql = "SELECT id, features FROM chair WHERE id > 29500 and features <> '' order by id ASC"
       logger.error "🔥#{sql}"
 
       chairs = db.xquery(sql).to_a
