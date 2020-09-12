@@ -537,7 +537,7 @@ class App < Sinatra::Base
         halt 400
       end
 
-    chair = db.xquery('SELECT * FROM chair WHERE id = ?', id).first
+    chair = db.xquery('SELECT width, height, depth FROM chair WHERE id = ?', id).first
     unless chair
       logger.error "Requested id's chair not found: #{id}"
       halt 404
