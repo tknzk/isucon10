@@ -537,7 +537,7 @@ class App < Sinatra::Base
         halt 400
       end
 
-    chair = db.xquery('SELECT width, height FROM chair WHERE id = ?', id).first
+    chair = db.xquery('SELECT * FROM chair WHERE id = ?', id).first
     unless chair
       logger.error "Requested id's chair not found: #{id}"
       halt 404
@@ -545,10 +545,10 @@ class App < Sinatra::Base
 
     w = chair[:width]
     h = chair[:height]
+    d = chair[:depth]
 
-    # sql = "SELECT * FROM estate WHERE (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
-    sql = "SELECT * FROM estate WHERE (door_width >= ? AND door_height >= ?)  ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
-    estates = db.xquery(sql, w, h).to_a
+    sql = "SELECT * FROM estate WHERE (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
+    estates = db.xquery(sql, w, h, w, d, h, w, h, d, d, w, d, h).to_a
 
     { estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
