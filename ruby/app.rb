@@ -305,7 +305,9 @@ class App < Sinatra::Base
         # end
       end
 
-      sql = "SELECT id, features FROM chair WHERE id in #{ids.join(',')} and features <> '' order by id ASC"
+      sql = "SELECT id, features FROM chair WHERE id in (#{ids.join(',')}) and features <> '' order by id ASC"
+      logger.error "🔥#{sql}"
+
       chairs = db.xquery(sql).to_a
       chairs.each do |row|
         row[:features].split(',').each do |ft|
