@@ -112,6 +112,15 @@ class App < Sinatra::Base
       end
     end
 
+    sql = "SELECT id, features FROM chair WHERE features <> '' order by id ASC"
+    chairs = db.xquery(sql).to_a
+    chairs.each do |row|
+      row[:features].split(',').each do |ft|
+        sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
+        db.xquery(sql_insert, row[:id], ft)
+      end
+    end
+
     { language: 'ruby' }.to_json
   end
 
@@ -281,6 +290,11 @@ class App < Sinatra::Base
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
+
+        row[9].split(',').each do |ft|
+          sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
+          db.xquery(sql_insert, row[0], ft)
+        end
       end
     end
 
