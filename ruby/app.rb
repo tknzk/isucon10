@@ -217,8 +217,8 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      sql = "SELECT chair_id FROM chair_features WHERE feature IN (?)"
-      ids = db.xquery(sql, params[:features].split(',')).to_a
+      sql = "SELECT distinct(chair_id) FROM chair_features WHERE feature IN (?)"
+      ids = db.xquery(sql, params[:features].split(',')).to_a.map {|b| b[:chair_id] }.uniq
       search_queries << "id in (#{ids.join(',')})"
       logger.error "🥁 #{ids}"
       logger.error "🥁 #{search_queries}"
