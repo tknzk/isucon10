@@ -23,6 +23,7 @@ CREATE TABLE isuumo.estate
 ALTER TABLE isuumo.estate ADD INDEX index_door_h_w(door_height, door_width);
 ALTER TABLE isuumo.estate ADD INDEX index_door_w_h(door_width, door_height);
 ALTER TABLE isuumo.estate ADD INDEX index_rent(rent);
+ALTER TABLE isuumo.estate ADD INDEX index_latlong(latitude, longitude);
 ALTER TABLE isuumo.estate ADD INDEX index_estate_popularity(popularity);
 
 
