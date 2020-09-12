@@ -217,13 +217,15 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      # sql = "SELECT chair_id FROM chair_features WHERE feature IN (?)"
-      # ids = db.xquery(sql, params[:features].split(',')).to_a
-      # search_queries << "id in (#{ids.join(',')})"
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
-      end
+      sql = "SELECT chair_id FROM chair_features WHERE feature IN (?)"
+      ids = db.xquery(sql, params[:features].split(',')).to_a
+      search_queries << "id in (#{ids.join(',')})"
+      logger.error "🥁 #{ids}"
+      logger.error "🥁 #{search_queries}"
+      # params[:features].split(',').each do |feature_condition|
+      #   search_queries << "features LIKE CONCAT('%', ?, '%')"
+      #   query_params.push(feature_condition)
+      # end
     end
 
     if search_queries.size == 0
@@ -295,14 +297,6 @@ class App < Sinatra::Base
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
         ids << row[0].to_i
-
-        # # logger.error "🔥#{row.inspect}"
-        # next if row[9].empty?
-        # row[9].split(',').each do |ft|
-        #   sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
-        #   # logger.error "🔥#{sql_insert}"
-        #   db.xquery(sql_insert, row[0], ft)
-        # end
       end
 
       sql = "SELECT id, features FROM chair WHERE id in (#{ids.join(',')}) and features <> '' order by id ASC"
