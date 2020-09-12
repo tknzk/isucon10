@@ -20,7 +20,7 @@ CREATE TABLE isuumo.estate
     popularity  INTEGER             NOT NULL
 );
 ALTER TABLE isuumo.estate ADD INDEX index_door_h_w(door_height, door_width);
-ALTER TABLE isuumo.estate ADD INDEX index_door_w_h(door_height, door_width);
+ALTER TABLE isuumo.estate ADD INDEX index_door_w_h(door_width, door_height);
 
 
 CREATE TABLE isuumo.chair
