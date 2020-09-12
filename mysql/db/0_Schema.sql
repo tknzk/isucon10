@@ -43,6 +43,7 @@ CREATE TABLE isuumo.chair
 ALTER TABLE isuumo.chair ADD INDEX index_stock(stock);
 
 CREATE TABLE isuumo.chair_features
+(
     id          INTEGER         NOT NULL PRIMARY KEY,
     chair_id    INTEGER         NOT NULL,
     feature     VARCHAR(64)     NOT NULL
