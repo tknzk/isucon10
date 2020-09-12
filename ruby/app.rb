@@ -217,6 +217,9 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
+      # sql = "SELECT chair_id FROM chair_features WHERE feature IN (?)"
+      # ids = db.xquery(sql, params[:features].split(',')).to_a
+      # search_queries << "id in (#{ids.join(',')})"
       params[:features].split(',').each do |feature_condition|
         search_queries << "features LIKE CONCAT('%', ?, '%')"
         query_params.push(feature_condition)
@@ -293,6 +296,7 @@ class App < Sinatra::Base
 
         row[9].split(',').each do |ft|
           sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
+          logger.error "🔥#{sql_insert}"
           db.xquery(sql_insert, row[0], ft)
         end
       end
