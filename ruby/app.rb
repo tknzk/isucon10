@@ -296,7 +296,7 @@ class App < Sinatra::Base
 
         logger.error "🔥#{row.inspect}"
         logger.error "🔥#{row[9]}"
-        next if row[9].blank?
+        next if row[9].empty?
         row[9].split(',').each do |ft|
           sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
           logger.error "🔥#{sql_insert}"
