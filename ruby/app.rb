@@ -294,6 +294,7 @@ class App < Sinatra::Base
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
 
+        next if row[9].blank?
         row[9].split(',').each do |ft|
           sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
           logger.error "🔥#{sql_insert}"
