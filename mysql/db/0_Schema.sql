@@ -19,6 +19,9 @@ CREATE TABLE isuumo.estate
     features    VARCHAR(64)         NOT NULL,
     popularity  INTEGER             NOT NULL
 );
+ALTER TABLE isuumo.estate ADD INDEX index_door_h_w(door_height, door_width);
+ALTER TABLE isuumo.estate ADD INDEX index_door_w_h(door_height, door_width);
+
 
 CREATE TABLE isuumo.chair
 (
@@ -36,3 +39,4 @@ CREATE TABLE isuumo.chair
     popularity  INTEGER         NOT NULL,
     stock       INTEGER         NOT NULL
 );
+ALTER TABLE isuumo.chair ADD INDEX index_stock(stock);
