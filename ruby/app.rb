@@ -290,19 +290,19 @@ class App < Sinatra::Base
       end
 
     end
-    transaction('post_api_chair_s') do
-      sql = "SELECT id, features FROM chair WHERE id > 29500 and features <> '' order by id ASC"
-      logger.error "🔥#{sql}"
+    # transaction('post_api_chair_s') do
+    #   sql = "SELECT id, features FROM chair WHERE id > 29500 and features <> '' order by id ASC"
+    #   logger.error "🔥#{sql}"
 
-      chairs = db.xquery(sql).to_a
-      chairs.each do |row|
-        row[:features].split(',').each do |ft|
-          sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
-          logger.error "🔥#{sql_insert},#{row[:id]}, #{ft}"
-          db.xquery(sql_insert, row[:id], ft)
-        end
-      end
-    end
+    #   chairs = db.xquery(sql).to_a
+    #   chairs.each do |row|
+    #     row[:features].split(',').each do |ft|
+    #       sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
+    #       logger.error "🔥#{sql_insert},#{row[:id]}, #{ft}"
+    #       db.xquery(sql_insert, row[:id], ft)
+    #     end
+    #   end
+    # end
 
     status 201
   end
