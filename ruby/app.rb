@@ -103,7 +103,7 @@ class App < Sinatra::Base
 
   post '/initialize' do
     sql_dir = Pathname.new('../mysql/db')
-    %w[0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql].each do |sql|
+    %w[0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql chair_features.sql].each do |sql|
       sql_path = sql_dir.join(sql)
       cmd = ['mysql', '-h', db_info[:host], '-u', db_info[:username], "-p#{db_info[:password]}", '-P', db_info[:port], db_info[:database]]
       IO.popen(cmd, 'w') do |io|
@@ -112,14 +112,14 @@ class App < Sinatra::Base
       end
     end
 
-    sql = "SELECT id, features FROM chair WHERE features <> '' order by id ASC"
-    chairs = db.xquery(sql).to_a
-    chairs.each do |row|
-      row[:features].split(',').each do |ft|
-        sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
-        db.xquery(sql_insert, row[:id], ft)
-      end
-    end
+    # sql = "SELECT id, features FROM chair WHERE features <> '' order by id ASC"
+    # chairs = db.xquery(sql).to_a
+    # chairs.each do |row|
+    #   row[:features].split(',').each do |ft|
+    #     sql_insert = 'INSERT INTO chair_features(chair_id, feature) VALUES (?, ?)'
+    #     db.xquery(sql_insert, row[:id], ft)
+    #   end
+    # end
 
     { language: 'ruby' }.to_json
   end
