@@ -24,7 +24,7 @@ class App < Sinatra::Base
   helpers do
     def db_info
       {
-        host: ENV.fetch('MYSQL_HOST', '127.0.0.1'),
+        host: ENV.fetch('MYSQL_HOST', '10.163.12.103'),
         port: ENV.fetch('MYSQL_PORT', '3306'),
         username: ENV.fetch('MYSQL_USER', 'isucon'),
         password: ENV.fetch('MYSQL_PASS', 'isucon'),
@@ -102,6 +102,7 @@ class App < Sinatra::Base
   end
 
   post '/initialize' do
+    logger.error "🚗🚗🚗🚗🚗:#{db_info}"
     sql_dir = Pathname.new('../mysql/db')
     %w[0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql chair_features.sql].each do |sql|
       sql_path = sql_dir.join(sql)
