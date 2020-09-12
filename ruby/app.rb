@@ -466,8 +466,8 @@ class App < Sinatra::Base
       },
     }
 
-    # sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ? ORDER BY popularity DESC, id ASC'
-    sql = 'SELECT * FROM estate WHERE ( latitude between ? AND ? ) AND (longitude between ? AND ? ) ORDER BY popularity DESC, id ASC'
+    sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ? ORDER BY popularity DESC, id ASC'
+    # sql = 'SELECT * FROM estate WHERE ( latitude between ? AND ? ) AND (longitude between ? AND ? ) ORDER BY popularity DESC, id ASC'
     estates = db.xquery(sql,
                         bounding_box[:bottom_right][:latitude],
                         bounding_box[:top_left][:latitude],
